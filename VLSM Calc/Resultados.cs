@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace VLSM_Calc
 {
-    public partial class Form1 : Form
+    public partial class Resultados : Form
     {
-        public Form1()
+        public Resultados()
         {
             InitializeComponent();
         }
