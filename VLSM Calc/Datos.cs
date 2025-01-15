@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -14,11 +15,14 @@ namespace VLSM_Calc
     {
         private static string[] maskValues = new string[] { "0", "128", "192", "224", "240", "248", "252", "254", "255" };
         private static int subNetCount = 1;
+        private static Form resultados;
+        private static string netIP;
 
         public Datos()
         {
             InitializeComponent();
             txtName1.Text = "LAN" + subNetCount;
+            txtIP.ValidatingType = typeof(System.Net.IPAddress);
         }
 
         private void numMask_ValueChanged(object sender, EventArgs e)
@@ -75,7 +79,8 @@ namespace VLSM_Calc
                         {
                             Size = control.Size,
                             Text = "LAN" + ++subNetCount,
-                            Location = control.Location
+                            Location = control.Location,
+                            Tag = "name"
                         };
                     }
                     else if (control is TextBox && control.Name == "txtHosts1")
@@ -83,7 +88,8 @@ namespace VLSM_Calc
                         newControl = new TextBox()
                         {
                             Size = control.Size,
-                            Location = control.Location
+                            Location = control.Location,
+                            Tag = "hosts"
                         };
                     }
                     else if (control is Button)
@@ -130,6 +136,114 @@ namespace VLSM_Calc
             {
                 e.Handled = true;
             }
+        }
+
+        private void btnCalculate_Click(object sender, EventArgs e)
+        {
+            if (netIP != "")
+            {
+                int totalHosts = 0;
+                bool valid = true;
+                foreach (TextBox txt in flowSubNets.Controls.OfType<Panel>().SelectMany(panel => panel.Controls.OfType<TextBox>()))
+                {
+                    if (txt.Text == "")
+                    {
+                        valid = false;
+                        break;
+                    }
+                    else if (txt.Tag.Equals("hosts"))
+                    {
+                        totalHosts += int.Parse(txt.Text);
+                    }
+                }
+                if (valid)
+                {
+                    if (!(totalHosts > Math.Pow(2, 32 - (int)numMask.Value) - 2))
+                    {
+                        IP ip = new IP(netIP);
+                        Console.WriteLine(ip.getIP());
+                        int hostBits = 32 - (int)numMask.Value;
+                        Console.WriteLine(hostBits.ToString());
+                        float result = (float)hostBits / 8;
+                        Console.WriteLine(result.ToString());
+                        int octets = (int)Math.Ceiling(result);
+                        Console.WriteLine(octets.ToString());
+                        string[] binaryOctects = ip.getBinaryRight(octets);
+                        bool validIP = true;
+                        for (int i = octets - 1; i >= 0; i--)
+                        {
+                            char[] tempChar = binaryOctects[i].ToCharArray();
+                            for (int j = 7; j >= 0; j--)
+                            {
+                                if (tempChar[j] == '1')
+                                {
+                                    validIP = false;
+                                    break;
+                                }
+                            }
+                        }
+                        if (validIP)
+                        {
+                            //Net mainNet = new Net(new IP(txtIP.Text), (int)numMask.Value);
+                            //List<SubNet> subNets = new List<SubNet>();
+                            //foreach (TextBox txt in flowSubNets.Controls.OfType<Panel>().SelectMany(panel => panel.Controls.OfType<TextBox>()))
+                            //{
+                            //    string name = "";
+                            //    int hosts = 0;
+                            //    if (txt.Tag.Equals("name"))
+                            //    {
+                            //        name = txt.Text;
+                            //    }
+                            //    if (txt.Tag.Equals("hosts"))
+                            //    {
+                            //        hosts = int.Parse(txt.Text);
+                            //    }
+                            //    subNets.Add(new SubNet(name, hosts));
+                            //}
+                            //resultados = new Resultados();
+                            //resultados.Show();
+                            //this.Hide();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Dirección IP inválida, no es una IP de red.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("El número total de hosts requeridos supera el límite de la red.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Todos los campos deben estar llenos.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Dirección IP inválida, corrígela para continuar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void txtIP_TypeValidationCompleted(object sender, TypeValidationEventArgs e)
+        {
+            MaskedTextBox box = (MaskedTextBox)sender;
+            string cleanText = box.Text.Replace(" ", "");
+
+            if (!System.Net.IPAddress.TryParse(cleanText, out _))
+            {
+                MessageBox.Show("Dirección IP inválida.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            else
+            {
+                netIP = cleanText;
+            }
+        }
+
+
+        private void txtIP_Enter(object sender, EventArgs e)
+        {
+            netIP = "";
         }
     }
 }

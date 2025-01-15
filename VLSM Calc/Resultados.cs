@@ -16,5 +16,10 @@ namespace VLSM_Calc
         {
             InitializeComponent();
         }
+
+        private void appClose(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }

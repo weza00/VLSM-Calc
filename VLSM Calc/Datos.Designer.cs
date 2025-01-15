@@ -32,7 +32,6 @@
             this.pboxLogo = new System.Windows.Forms.PictureBox();
             this.lblTitle = new System.Windows.Forms.Label();
             this.lblIP = new System.Windows.Forms.Label();
-            this.txtIP = new System.Windows.Forms.TextBox();
             this.lblMask = new System.Windows.Forms.Label();
             this.lblMask2 = new System.Windows.Forms.Label();
             this.gboxLans = new System.Windows.Forms.GroupBox();
@@ -48,6 +47,7 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.btnAddSubNet = new System.Windows.Forms.Button();
             this.numSubNets = new System.Windows.Forms.NumericUpDown();
+            this.txtIP = new System.Windows.Forms.MaskedTextBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pboxLogo)).BeginInit();
             this.gboxLans.SuspendLayout();
@@ -99,14 +99,6 @@
             this.lblIP.Size = new System.Drawing.Size(90, 19);
             this.lblIP.TabIndex = 1;
             this.lblIP.Text = "IP de Red";
-            // 
-            // txtIP
-            // 
-            this.txtIP.Location = new System.Drawing.Point(113, 112);
-            this.txtIP.Name = "txtIP";
-            this.txtIP.Size = new System.Drawing.Size(145, 26);
-            this.txtIP.TabIndex = 2;
-            this.txtIP.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.CharControl);
             // 
             // lblMask
             // 
@@ -180,6 +172,7 @@
             this.txtHosts1.Name = "txtHosts1";
             this.txtHosts1.Size = new System.Drawing.Size(100, 26);
             this.txtHosts1.TabIndex = 4;
+            this.txtHosts1.Tag = "hosts";
             this.txtHosts1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.CharControl);
             // 
             // label1
@@ -210,6 +203,7 @@
             this.txtName1.Name = "txtName1";
             this.txtName1.Size = new System.Drawing.Size(100, 26);
             this.txtName1.TabIndex = 0;
+            this.txtName1.Tag = "name";
             // 
             // btnCalculate
             // 
@@ -220,12 +214,13 @@
             this.btnCalculate.TabIndex = 7;
             this.btnCalculate.Text = "Calcular";
             this.btnCalculate.UseVisualStyleBackColor = true;
+            this.btnCalculate.Click += new System.EventHandler(this.btnCalculate_Click);
             // 
             // numMask
             // 
             this.numMask.Location = new System.Drawing.Point(286, 113);
             this.numMask.Maximum = new decimal(new int[] {
-            32,
+            30,
             0,
             0,
             0});
@@ -282,26 +277,38 @@
             0,
             0});
             // 
-            // Form1
+            // txtIP
+            // 
+            this.txtIP.Location = new System.Drawing.Point(113, 112);
+            this.txtIP.Mask = "###,###,###,###";
+            this.txtIP.Name = "txtIP";
+            this.txtIP.PromptChar = ' ';
+            this.txtIP.Size = new System.Drawing.Size(145, 26);
+            this.txtIP.TabIndex = 10;
+            this.txtIP.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtIP.TypeValidationCompleted += new System.Windows.Forms.TypeValidationEventHandler(this.txtIP_TypeValidationCompleted);
+            this.txtIP.Enter += new System.EventHandler(this.txtIP_Enter);
+            // 
+            // Datos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(237)))), ((int)(((byte)(211)))));
             this.ClientSize = new System.Drawing.Size(726, 477);
+            this.Controls.Add(this.txtIP);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.numMask);
             this.Controls.Add(this.btnCalculate);
             this.Controls.Add(this.gboxLans);
             this.Controls.Add(this.lblMask2);
             this.Controls.Add(this.lblMask);
-            this.Controls.Add(this.txtIP);
             this.Controls.Add(this.lblIP);
             this.Controls.Add(this.panel1);
             this.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
-            this.Name = "Form1";
+            this.Name = "Datos";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "VLSM Calc";
             this.panel1.ResumeLayout(false);
@@ -325,7 +332,6 @@
         private System.Windows.Forms.PictureBox pboxLogo;
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.Label lblIP;
-        private System.Windows.Forms.TextBox txtIP;
         private System.Windows.Forms.Label lblMask;
         private System.Windows.Forms.Label lblMask2;
         private System.Windows.Forms.GroupBox gboxLans;
@@ -341,6 +347,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnDel1;
         private System.Windows.Forms.TextBox txtName1;
+        private System.Windows.Forms.MaskedTextBox txtIP;
     }
 }
 
