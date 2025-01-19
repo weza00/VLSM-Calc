@@ -170,39 +170,37 @@ namespace VLSM_Calc
                         Console.WriteLine(octets.ToString());
                         string[] binaryOctects = ip.getBinaryRight(octets);
                         bool validIP = true;
+                        int cont = 0;
                         for (int i = octets - 1; i >= 0; i--)
                         {
                             char[] tempChar = binaryOctects[i].ToCharArray();
                             for (int j = 7; j >= 0; j--)
                             {
+                                cont++;
                                 if (tempChar[j] == '1')
                                 {
                                     validIP = false;
+                                    break;
+                                }
+                                if (cont == hostBits)
+                                {
                                     break;
                                 }
                             }
                         }
                         if (validIP)
                         {
-                            //Net mainNet = new Net(new IP(txtIP.Text), (int)numMask.Value);
-                            //List<SubNet> subNets = new List<SubNet>();
-                            //foreach (TextBox txt in flowSubNets.Controls.OfType<Panel>().SelectMany(panel => panel.Controls.OfType<TextBox>()))
-                            //{
-                            //    string name = "";
-                            //    int hosts = 0;
-                            //    if (txt.Tag.Equals("name"))
-                            //    {
-                            //        name = txt.Text;
-                            //    }
-                            //    if (txt.Tag.Equals("hosts"))
-                            //    {
-                            //        hosts = int.Parse(txt.Text);
-                            //    }
-                            //    subNets.Add(new SubNet(name, hosts));
-                            //}
-                            //resultados = new Resultados();
-                            //resultados.Show();
-                            //this.Hide();
+                            Net mainNet = new Net(ip, (int)numMask.Value, 0);
+                            List<SubNet> subNets = new List<SubNet>();
+                            List<TextBox> txtx = flowSubNets.Controls.OfType<Panel>().SelectMany(panel => panel.Controls.OfType<TextBox>()).ToList();
+                            txtx.Count();
+                            for (int i = 0; i < txtx.Count; i += 2)
+                            {
+                                subNets.Add(new SubNet(txtx[i + 1].Text, int.Parse(txtx[i].Text)));
+                            }
+                            resultados = new Resultados(mainNet, subNets);
+                            resultados.Show();
+                            this.Hide();
                         }
                         else
                         {

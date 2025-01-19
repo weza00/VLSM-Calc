@@ -173,6 +173,7 @@
             this.txtHosts1.Size = new System.Drawing.Size(100, 26);
             this.txtHosts1.TabIndex = 4;
             this.txtHosts1.Tag = "hosts";
+            this.txtHosts1.Text = "5000";
             this.txtHosts1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.CharControl);
             // 
             // label1
@@ -233,7 +234,7 @@
             this.numMask.Size = new System.Drawing.Size(43, 26);
             this.numMask.TabIndex = 8;
             this.numMask.Value = new decimal(new int[] {
-            1,
+            17,
             0,
             0,
             0});
@@ -285,6 +286,7 @@
             this.txtIP.PromptChar = ' ';
             this.txtIP.Size = new System.Drawing.Size(145, 26);
             this.txtIP.TabIndex = 10;
+            this.txtIP.Text = "17217 128 0";
             this.txtIP.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtIP.TypeValidationCompleted += new System.Windows.Forms.TypeValidationEventHandler(this.txtIP_TypeValidationCompleted);
             this.txtIP.Enter += new System.EventHandler(this.txtIP_Enter);

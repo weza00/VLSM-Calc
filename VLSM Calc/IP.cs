@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace VLSM_Calc
 {
-    internal class IP
+    public class IP
     {
         public int[] Octets { get; set; }
         public IP()
@@ -26,6 +26,7 @@ namespace VLSM_Calc
         {
             return Octets[0].ToString() + "." + Octets[1].ToString() + "." + Octets[2].ToString() + "." + Octets[3].ToString();
         }
+
         public string[] getBinaryRight(int num)
         {
             string[] binary = new string[num];
@@ -35,6 +36,17 @@ namespace VLSM_Calc
             }
             return binary;
         }
-
+        public IP Clone()
+        {
+            return new IP(Octets[0], Octets[1], Octets[2], Octets[3]);
+        }
+        public string getBinaryOctet(int octet)
+        {
+            return Convert.ToString(Octets[octet], 2).PadLeft(8, '0');
+        }
+        public void setBinaryOctet(int octet, string binary)
+        {
+            Octets[octet] = Convert.ToInt32(binary, 2);
+        }
     }
 }
