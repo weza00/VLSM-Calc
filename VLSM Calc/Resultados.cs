@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.ExceptionServices;
 using System.Windows.Forms;
@@ -57,6 +58,7 @@ namespace VLSM_Calc
                     }
                     Net second = new Net(tempIP.getIP(), actNet.Mask + 1, 1);
                     stackNets.Push(second);
+                    rboxProcess.AppendText(actNet.getNet((int)Math.Ceiling((32 - (float)mainNet.Mask) / 8)) + "\n");
                     actNet = first;
                 }
                 else
@@ -68,8 +70,12 @@ namespace VLSM_Calc
                         subNets[subNetCount].CalculateFirstIP();
                         subNets[subNetCount].CalculateBroadcast(octetsNum);
                         subNets[subNetCount].CalculateLastIP();
+                        rboxProcess.SelectionColor = Color.Green;
+                        rboxProcess.AppendText(actNet.getNet((int)Math.Ceiling((32 - (float)mainNet.Mask) / 8)) + " <- " + subNets[subNetCount].Name + "\n");
+                        rboxProcess.SelectionColor = Color.Black;
                         subNetCount++;
-                        actNet = stackNets.Pop();
+                        if (subNetCount != subNets.Count)
+                            actNet = stackNets.Pop();
                     }
                     else
                     {
@@ -100,13 +106,14 @@ namespace VLSM_Calc
                         }
                         Net second = new Net(tempIP.getIP(), actNet.Mask + 1, actNet.Level + 1);
                         stackNets.Push(second);
+                        rboxProcess.AppendText(actNet.getNet((int)Math.Ceiling((32 - (float)mainNet.Mask) / 8)) + "\n");
                         actNet = first;
                     }
                 }
             }
-            foreach(SubNet subNet in subNets)
+            while (stackNets.Count > 0)
             {
-                rboxProcess.Text += subNet.printSubNet() + "\n\n";
+                rboxProcess.AppendText(stackNets.Pop().getNet((int)Math.Ceiling((32 - (float)mainNet.Mask) / 8)) + "\n");
             }
         }
 

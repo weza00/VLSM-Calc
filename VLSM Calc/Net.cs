@@ -23,9 +23,27 @@ namespace VLSM_Calc
             Mask = mask;
             Level = level;
         }
-        public string getNet()
+        public string getNet(int octetsNum)
         {
-            return NetIP.getIP() + "/" + Mask.ToString();
+            string init = "";
+            string final = NetIP.getIP() + " /" + Mask.ToString();
+            string ident = "";
+            for (int i = 0; i < 4 - octetsNum; i++)
+            {
+                init += NetIP.Octets[i].ToString() + ".";
+            }
+            for (int i = 4 - octetsNum; i < 4; i++)
+            {
+                if (i == 3)
+                    init += NetIP.getBinaryOctet(i);
+                else
+                    init += NetIP.getBinaryOctet(i) + ".";
+            }
+            for (int i = 0; i < Level; i++)
+            {
+                ident += "  ";
+            }
+            return ident + init + "\t\t" + final;
         }
     }
 }

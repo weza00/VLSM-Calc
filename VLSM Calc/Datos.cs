@@ -91,6 +91,7 @@ namespace VLSM_Calc
                             Location = control.Location,
                             Tag = "hosts"
                         };
+                        newControl.KeyPress += CharControl;
                     }
                     else if (control is Button)
                     {
