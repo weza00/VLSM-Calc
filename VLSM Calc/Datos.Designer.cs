@@ -48,6 +48,7 @@
             this.btnAddSubNet = new System.Windows.Forms.Button();
             this.numSubNets = new System.Windows.Forms.NumericUpDown();
             this.txtIP = new System.Windows.Forms.MaskedTextBox();
+            this.btnClear = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pboxLogo)).BeginInit();
             this.gboxLans.SuspendLayout();
@@ -124,7 +125,7 @@
             // 
             this.gboxLans.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.gboxLans.Controls.Add(this.flowSubNets);
-            this.gboxLans.Location = new System.Drawing.Point(12, 170);
+            this.gboxLans.Location = new System.Drawing.Point(12, 216);
             this.gboxLans.Name = "gboxLans";
             this.gboxLans.Size = new System.Drawing.Size(590, 295);
             this.gboxLans.TabIndex = 6;
@@ -154,7 +155,7 @@
             this.plOriginal.Location = new System.Drawing.Point(3, 3);
             this.plOriginal.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.plOriginal.Name = "plOriginal";
-            this.plOriginal.Size = new System.Drawing.Size(561, 68);
+            this.plOriginal.Size = new System.Drawing.Size(544, 68);
             this.plOriginal.TabIndex = 0;
             // 
             // label2
@@ -188,7 +189,7 @@
             // 
             this.btnDel1.BackColor = System.Drawing.Color.White;
             this.btnDel1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnDel1.Location = new System.Drawing.Point(410, 0);
+            this.btnDel1.Location = new System.Drawing.Point(393, 0);
             this.btnDel1.Name = "btnDel1";
             this.btnDel1.Size = new System.Drawing.Size(149, 66);
             this.btnDel1.TabIndex = 2;
@@ -210,7 +211,7 @@
             this.btnCalculate.Dock = System.Windows.Forms.DockStyle.Right;
             this.btnCalculate.Location = new System.Drawing.Point(616, 96);
             this.btnCalculate.Name = "btnCalculate";
-            this.btnCalculate.Size = new System.Drawing.Size(110, 381);
+            this.btnCalculate.Size = new System.Drawing.Size(110, 427);
             this.btnCalculate.TabIndex = 7;
             this.btnCalculate.Text = "Calcular";
             this.btnCalculate.UseVisualStyleBackColor = true;
@@ -244,7 +245,7 @@
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel2.Controls.Add(this.btnAddSubNet);
             this.panel2.Controls.Add(this.numSubNets);
-            this.panel2.Location = new System.Drawing.Point(435, 115);
+            this.panel2.Location = new System.Drawing.Point(432, 110);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(167, 55);
             this.panel2.TabIndex = 9;
@@ -289,12 +290,23 @@
             this.txtIP.TypeValidationCompleted += new System.Windows.Forms.TypeValidationEventHandler(this.txtIP_TypeValidationCompleted);
             this.txtIP.Enter += new System.EventHandler(this.txtIP_Enter);
             // 
+            // btnClear
+            // 
+            this.btnClear.Location = new System.Drawing.Point(15, 175);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(584, 35);
+            this.btnClear.TabIndex = 11;
+            this.btnClear.Text = "Limpiar Sub Redes";
+            this.btnClear.UseVisualStyleBackColor = true;
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            // 
             // Datos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(237)))), ((int)(((byte)(211)))));
-            this.ClientSize = new System.Drawing.Size(726, 477);
+            this.ClientSize = new System.Drawing.Size(726, 523);
+            this.Controls.Add(this.btnClear);
             this.Controls.Add(this.txtIP);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.numMask);
@@ -348,6 +360,7 @@
         private System.Windows.Forms.Button btnDel1;
         private System.Windows.Forms.TextBox txtName1;
         private System.Windows.Forms.MaskedTextBox txtIP;
+        private System.Windows.Forms.Button btnClear;
     }
 }
 

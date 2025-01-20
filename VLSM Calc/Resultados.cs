@@ -1,8 +1,9 @@
-﻿using System;
+﻿using PdfSharp.Drawing;
+using PdfSharp.Pdf;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Runtime.ExceptionServices;
 using System.Windows.Forms;
 
 namespace VLSM_Calc
@@ -11,14 +12,17 @@ namespace VLSM_Calc
     {
         private Net mainNet;
         private List<SubNet> subNets;
+        private Form datos;
 
-        public Resultados(Net mainNet, List<SubNet> subNets)
+        public Resultados(Net mainNet, List<SubNet> subNets, Datos datos)
         {
             InitializeComponent();
             this.mainNet = mainNet;
             this.subNets = subNets;
             this.subNets = this.subNets.OrderByDescending(x => x.Hosts).ToList();
+            this.datos = datos;
             VLSM();
+            DataShow();
         }
 
         public void VLSM()
@@ -117,9 +121,104 @@ namespace VLSM_Calc
             }
         }
 
+        private void DataShow()
+        {
+            foreach (SubNet subNet in subNets)
+            {
+                dataAsigns.Rows.Add(subNet.Name, subNet.NetIP.getIP(), subNet.Mask, subNet.FirstIP.getIP(), subNet.LastIP.getIP(), subNet.Broadcast.getIP());
+            }
+        }
+
+        private void btnGenPDF_Click(object sender, EventArgs e)
+        {
+            if (savePDF.ShowDialog() == DialogResult.OK)
+            {
+                string path = savePDF.FileName;
+                try
+                {
+                    PdfDocument document = new PdfDocument();
+                    PdfPage page = document.AddPage();
+                    XGraphics gfx = XGraphics.FromPdfPage(page);
+                    XFont titleFont = new XFont("Courier New", 12, XFontStyleEx.Regular);
+                    XFont headerFont = new XFont("Courier New", 12, XFontStyleEx.Bold);
+                    XFont rowFont = new XFont("Courier New", 10, XFontStyleEx.Regular);
+                    gfx.DrawString("VLSM CALC", titleFont, XBrushes.Black, new XRect(0, 0, page.Width, page.Height), XStringFormats.TopCenter);
+
+                    string[] processLines = rboxProcess.Lines;
+                    float yPoint = 40;
+                    foreach (string line in processLines)
+                    {
+                        if (yPoint > page.Height - 40)
+                        {
+                            page = document.AddPage();
+                            gfx = XGraphics.FromPdfPage(page);
+                            yPoint = 40;
+                        }
+                        gfx.DrawString(line.Replace("\t", "    "), titleFont, XBrushes.Black, new XRect(20, yPoint, page.Width - 40, page.Height), XStringFormats.TopLeft);
+                        yPoint += 20;
+                    }
+
+                    yPoint += 20;
+                    string[] headers = { "Nombre", "IP Red", "Máscara", "Primera IP", "Última IP", "Broadcast" };
+                    float[] columnWidths = { 100, 100, 50, 100, 100, 100 };
+                    float xPoint = 20;
+                    for (int i = 0; i < headers.Length; i++)
+                    {
+                        if (yPoint > page.Height - 40)
+                        {
+                            page = document.AddPage();
+                            gfx = XGraphics.FromPdfPage(page);
+                            yPoint = 40;
+                        }
+                        gfx.DrawString(headers[i], headerFont, XBrushes.Black, new XRect(xPoint, yPoint, columnWidths[i], 20), XStringFormats.TopLeft);
+                        gfx.DrawRectangle(XPens.Black, xPoint, yPoint, columnWidths[i], 20);
+                        xPoint += columnWidths[i];
+                    }
+
+                    yPoint += 20;
+                    foreach (DataGridViewRow row in dataAsigns.Rows)
+                    {
+                        if (row.IsNewRow) continue;
+                        xPoint = 20;
+                        for (int i = 0; i < row.Cells.Count; i++)
+                        {
+                            if (yPoint > page.Height - 40)
+                            {
+                                page = document.AddPage();
+                                gfx = XGraphics.FromPdfPage(page);
+                                yPoint = 40;
+                            }
+                            gfx.DrawString(row.Cells[i].Value?.ToString() ?? string.Empty, rowFont, XBrushes.Black, new XRect(xPoint, yPoint, columnWidths[i], 20), XStringFormats.TopLeft);
+                            gfx.DrawRectangle(XPens.Black, xPoint, yPoint, columnWidths[i], 20);
+                            xPoint += columnWidths[i];
+                        }
+                        yPoint += 20;
+                    }
+
+                    document.Save(path);
+                    MessageBox.Show("PDF generado exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al generar el PDF: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void btnBack_Click(object sender, EventArgs e)
+        {
+            rboxProcess.Clear();
+            dataAsigns.Rows.Clear();
+            datos.Show();
+            this.Close();
+        }
+
         private void appClose(object sender, FormClosingEventArgs e)
         {
-            Application.Exit();
+            if (!datos.Visible)
+            {
+                Application.Exit();
+            }
         }
     }
 }

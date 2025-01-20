@@ -69,5 +69,15 @@ namespace VLSM_Calc.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap square_poll_horizontal_svgrepo_com {
+            get {
+                object obj = ResourceManager.GetObject("square-poll-horizontal-svgrepo-com", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

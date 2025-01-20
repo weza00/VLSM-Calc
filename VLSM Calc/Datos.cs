@@ -58,7 +58,8 @@ namespace VLSM_Calc
                 {
                     Size = plOriginal.Size,
                     Margin = plOriginal.Margin,
-                    BorderStyle = plOriginal.BorderStyle
+                    BorderStyle = plOriginal.BorderStyle,
+                    Tag = "not-original"
                 };
 
                 foreach (Control control in plOriginal.Controls)
@@ -133,7 +134,7 @@ namespace VLSM_Calc
             {
                 e.Handled = true;
             }
-            else if (txt.Name == "txtHosts1" && !char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            else if (txt.Tag == "hosts" && !char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
             {
                 e.Handled = true;
             }
@@ -162,13 +163,9 @@ namespace VLSM_Calc
                     if (!(totalHosts > Math.Pow(2, 32 - (int)numMask.Value) - 2))
                     {
                         IP ip = new IP(netIP);
-                        Console.WriteLine(ip.getIP());
                         int hostBits = 32 - (int)numMask.Value;
-                        Console.WriteLine(hostBits.ToString());
                         float result = (float)hostBits / 8;
-                        Console.WriteLine(result.ToString());
                         int octets = (int)Math.Ceiling(result);
-                        Console.WriteLine(octets.ToString());
                         string[] binaryOctects = ip.getBinaryRight(octets);
                         bool validIP = true;
                         int cont = 0;
@@ -199,7 +196,7 @@ namespace VLSM_Calc
                             {
                                 subNets.Add(new SubNet(txtx[i + 1].Text, int.Parse(txtx[i].Text)));
                             }
-                            resultados = new Resultados(mainNet, subNets);
+                            resultados = new Resultados(mainNet, subNets, this);
                             resultados.Show();
                             this.Hide();
                         }
@@ -243,6 +240,19 @@ namespace VLSM_Calc
         private void txtIP_Enter(object sender, EventArgs e)
         {
             netIP = "";
+        }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            foreach (var panel in flowSubNets.Controls.OfType<Panel>().ToList())
+            {
+                if (panel.Name != "plOriginal")
+                {
+                    flowSubNets.Controls.Remove(panel);
+                }
+            }
+            subNetCount = 1;
+            txtName1.Text = "LAN" + subNetCount;
         }
     }
 }

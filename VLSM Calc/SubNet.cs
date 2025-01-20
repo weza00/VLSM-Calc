@@ -43,7 +43,7 @@ namespace VLSM_Calc
             }
             else
             {
-                sum = hosts / (256 * (octetsNum - 1));
+                sum = hosts / (int)Math.Pow(256, (octetsNum - 1));
             }
             Broadcast.Octets[4 - octetsNum] += sum;
             for (int i = 4 - octetsNum + 1; i < 4; i++)
