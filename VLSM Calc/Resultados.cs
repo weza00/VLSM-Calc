@@ -1,4 +1,5 @@
-﻿using PdfSharp.Drawing;
+﻿using PdfSharp;
+using PdfSharp.Drawing;
 using PdfSharp.Pdf;
 using System;
 using System.Collections.Generic;
@@ -138,10 +139,11 @@ namespace VLSM_Calc
                 {
                     PdfDocument document = new PdfDocument();
                     PdfPage page = document.AddPage();
+                    page.Orientation = PageOrientation.Landscape;
                     XGraphics gfx = XGraphics.FromPdfPage(page);
-                    XFont titleFont = new XFont("Courier New", 12, XFontStyleEx.Regular);
+                    XFont titleFont = new XFont("Courier New", 14, XFontStyleEx.Bold);
                     XFont headerFont = new XFont("Courier New", 12, XFontStyleEx.Bold);
-                    XFont rowFont = new XFont("Courier New", 10, XFontStyleEx.Regular);
+                    XFont rowFont = new XFont("Courier New", 8, XFontStyleEx.Regular);
                     gfx.DrawString("VLSM CALC", titleFont, XBrushes.Black, new XRect(0, 0, page.Width, page.Height), XStringFormats.TopCenter);
 
                     string[] processLines = rboxProcess.Lines;
@@ -151,6 +153,7 @@ namespace VLSM_Calc
                         if (yPoint > page.Height - 40)
                         {
                             page = document.AddPage();
+                            page.Orientation = PageOrientation.Landscape;
                             gfx = XGraphics.FromPdfPage(page);
                             yPoint = 40;
                         }
@@ -167,6 +170,7 @@ namespace VLSM_Calc
                         if (yPoint > page.Height - 40)
                         {
                             page = document.AddPage();
+                            page.Orientation = PageOrientation.Landscape;
                             gfx = XGraphics.FromPdfPage(page);
                             yPoint = 40;
                         }
@@ -185,6 +189,7 @@ namespace VLSM_Calc
                             if (yPoint > page.Height - 40)
                             {
                                 page = document.AddPage();
+                                page.Orientation = PageOrientation.Landscape;
                                 gfx = XGraphics.FromPdfPage(page);
                                 yPoint = 40;
                             }
